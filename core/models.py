@@ -10,7 +10,18 @@ class DateInfoMixin(models.Model):
 
 
 class Code(models.Model):
-    code = models.CharField('Код', max_length=250)
+    client = models.ForeignKey('Client', on_delete=models.SET_NULL, related_name='clients',
+                               verbose_name='Клиент', null=True, blank=True)
+    code = models.CharField('Код', max_length=250, unique=True)
+    points = models.PositiveIntegerField('Баллы', default=1)
+
+    class Meta:
+        verbose_name = 'Штрих код'
+        verbose_name_plural = 'Штрих коды'
+        unique_together = ('client', 'code')
+
+    def __str__(self):
+        return self.code
 
 
 class Client(DateInfoMixin):
